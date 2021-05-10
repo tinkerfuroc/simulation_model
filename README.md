@@ -1,3 +1,7 @@
+# Tinker robot simulation model
+
+![image-20210510150646017](README.assets/image-20210510150646017.png)
+
 ### Clone Repositories
 
 ```

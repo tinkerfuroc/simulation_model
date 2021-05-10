@@ -1,0 +1,15 @@
+<launch>
+  <arg name="sim" default="true" />
+  <arg name="limited" default="false"/>
+  <arg name="debug" default="false" />
+    
+  <!-- Remap follow_joint_trajectory -->
+  <remap if="$(arg sim)" from="/scaled_pos_joint_traj_controller/follow_joint_trajectory" to="/arm_controller/follow_joint_trajectory"/>
+  <remap if="$(arg sim)" from="/gripper" to="/gripper/gripper_cmd"/>
+  
+  <!-- Launch moveit -->
+  <include file="$(find tinker_moveit_config)/launch/move_group.launch">
+    <arg name="limited" default="$(arg limited)"/>
+    <arg name="debug" default="$(arg debug)" />
+  </include>
+</launch>

@@ -1,0 +1,24 @@
+<launch>
+  <arg name="model" />
+  <arg name="gui" default="false" />
+  <arg name="rviz" default="true" />
+  <arg name="robot_pub" default="true" />
+  <arg name="joint_pub" default="false" />
+  <arg name="joint_source_list" default="[/dynamixel_workbench/joint_states]"/>
+  <arg name="kinematics_config" default="$(find ur_description)/config/ur5_default.yaml"/>
+
+  <!--<param name="robot_description" textfile="$(find tinker_description)/urdf/tinker.urdf" />-->
+  <param name="robot_description" command="xacro '$(find tinker_description)/urdf/tinker.urdf.xacro'
+  kinematics_config:=$(arg kinematics_config)" />
+  <param name="use_gui" value="$(arg gui)" />
+
+  <group if="$(arg robot_pub)">
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" > </node>
+  </group>
+
+  <group if="$(arg joint_pub)">
+    <node name="joint_state_publisher_gui" pkg="joint_state_publisher_gui" type="joint_state_publisher_gui" />
+  </group>
+
+  <node if= "$(arg rviz)" name="rviz" pkg="rviz" type="rviz" args="-d $(find tinker_description)/rviz/urdf.rviz" />
+</launch>

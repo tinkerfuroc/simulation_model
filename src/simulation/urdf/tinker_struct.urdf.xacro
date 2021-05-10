@@ -1,0 +1,314 @@
+<?xml version="1.0"?>
+
+<robot name="tinker_stl" xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <xacro:macro name="tinker_stl" params="prefix parent *origin">
+  
+    <joint name="${prefix}base_joint" type="fixed">
+      <xacro:insert_block name="origin" />
+      <parent link="${parent}" />
+      <child link="${prefix}base_link" />
+    </joint>
+  
+    <link
+      name="${prefix}base_link">
+      <inertial>
+        <origin
+          xyz="0.00651527582273742 0.00194791044162557 0.401685767279453"
+          rpy="0 0 0" />
+        <mass
+          value="39.5849430175933" />
+        <inertia
+          ixx="0.626818489620229"
+          ixy="-4.06179508173477E-10"
+          ixz="8.71500781120329E-06"
+          iyy="0.345514094118603"
+          iyz="7.37359849923993E-08"
+          izz="0.489515819321296" />
+      </inertial>
+      <visual>
+        <origin
+          xyz="0 0 0"
+          rpy="0 0 0" />
+        <geometry>
+          <mesh
+            filename="package://tinker_description/meshes/base_link.STL" />
+        </geometry>
+        <material
+          name="">
+          <color
+            rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+        </material>
+      </visual>
+      <collision>
+        <origin
+          xyz="0 0 0"
+          rpy="0 0 0" />
+        <geometry>
+          <mesh
+            filename="package://tinker_description/meshes/base_link.STL" />
+        </geometry>
+      </collision>
+    </link>
+    
+    <link
+      name="${prefix}wheel_lf_link">
+      <inertial>
+        <origin
+          xyz="-5.96744875736022E-16 -1.12410081243297E-15 -2.90878432451791E-14"
+          rpy="0 0 0" />
+        <mass
+          value="0.530143760293278" />
+        <inertia
+          ixx="0.000785275444934418"
+          ixy="-2.45913425065776E-18"
+          ixz="-3.95026962345359E-36"
+          iyy="0.00149102932582484"
+          iyz="-2.53570236682917E-36"
+          izz="0.000785275444934418" />
+      </inertial>
+      <visual>
+        <origin
+          xyz="0 0 0"
+          rpy="0 0 0" />
+        <geometry>
+          <mesh
+            filename="package://tinker_description/meshes/wheel_lf_link.STL" />
+        </geometry>
+        <material
+          name="">
+          <color
+            rgba="1 1 1 1" />
+        </material>
+      </visual>
+      <collision>
+        <origin
+          xyz="0 0 0"
+          rpy="0 0 0" />
+        <geometry>
+          <mesh
+            filename="package://tinker_description/meshes/wheel_lf_link.STL" />
+        </geometry>
+      </collision>
+    </link>
+    <joint
+      name="${prefix}wheel_lf_joint"
+      type="continuous">
+      <origin
+        xyz="0.219205882352948 0.21000000000001 0.075000000000029"
+        rpy="0 0 0" />
+      <parent
+        link="${prefix}base_link" />
+      <child
+        link="${prefix}wheel_lf_link" />
+      <axis
+        xyz="0 1 0" />
+    </joint>
+    <transmission name="${prefix}wheel_lf_joint_trans">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="${prefix}wheel_lf_joint" >
+        <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="${prefix}wheel_lf_joint_motor">
+        <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+    </transmission>
+    
+    <link
+      name="${prefix}wheel_rf_link">
+      <inertial>
+        <origin
+          xyz="7.91033905045424E-16 -1.11022302462516E-15 0"
+          rpy="0 0 0" />
+        <mass
+          value="0.530143760293278" />
+        <inertia
+          ixx="0.000785275444934418"
+          ixy="-2.46421966885307E-18"
+          ixz="-9.62964972193521E-35"
+          iyy="0.00149102932582484"
+          iyz="-6.84642425972467E-36"
+          izz="0.000785275444934418" />
+      </inertial>
+      <visual>
+        <origin
+          xyz="0 0 0"
+          rpy="0 0 0" />
+        <geometry>
+          <mesh
+            filename="package://tinker_description/meshes/wheel_rf_link.STL" />
+        </geometry>
+        <material
+          name="">
+          <color
+            rgba="1 1 1 1" />
+        </material>
+      </visual>
+      <collision>
+        <origin
+          xyz="0 0 0"
+          rpy="0 0 0" />
+        <geometry>
+          <mesh
+            filename="package://tinker_description/meshes/wheel_rf_link.STL" />
+        </geometry>
+      </collision>
+    </link>
+    <joint
+      name="${prefix}wheel_rf_joint"
+      type="continuous">
+      <origin
+        xyz="0.219205882352948 -0.20999999999999 0.0749999999999999"
+        rpy="0 0 0" />
+      <parent
+        link="${prefix}base_link" />
+      <child
+        link="${prefix}wheel_rf_link" />
+      <axis
+        xyz="0 1 0" />
+    </joint>
+    <transmission name="${prefix}wheel_rf_joint_trans">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="${prefix}wheel_rf_joint" >
+        <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="${prefix}wheel_rf_joint_motor">
+        <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+    </transmission>
+    
+    <link
+      name="${prefix}wheel_lb_link">
+      <inertial>
+        <origin
+          xyz="1.22124532708767E-14 -2.38142838782096E-14 -3.36952687973735E-14"
+          rpy="0 0 0" />
+        <mass
+          value="0.530143760293278" />
+        <inertia
+          ixx="0.000785275444934418"
+          ixy="-2.45913425065776E-18"
+          ixz="-8.56243203799492E-35"
+          iyy="0.00149102932582484"
+          iyz="-2.53570236682917E-36"
+          izz="0.000785275444934418" />
+      </inertial>
+      <visual>
+        <origin
+          xyz="0 0 0"
+          rpy="0 0 0" />
+        <geometry>
+          <mesh
+            filename="package://tinker_description/meshes/wheel_lb_link.STL" />
+        </geometry>
+        <material
+          name="">
+          <color
+            rgba="1 1 1 1" />
+        </material>
+      </visual>
+      <collision>
+        <origin
+          xyz="0 0 0"
+          rpy="0 0 0" />
+        <geometry>
+          <mesh
+            filename="package://tinker_description/meshes/wheel_lb_link.STL" />
+        </geometry>
+      </collision>
+    </link>
+    <joint
+      name="${prefix}wheel_lb_joint"
+      type="continuous">
+      <origin
+        xyz="-0.217794117647078 0.210000000000032 0.0750000000000339"
+        rpy="0 0 0" />
+      <parent
+        link="${prefix}base_link" />
+      <child
+        link="${prefix}wheel_lb_link" />
+      <axis
+        xyz="0 1 0" />
+    </joint>
+    
+    <link
+      name="${prefix}wheel_rb_link">
+      <inertial>
+        <origin
+          xyz="-6.99440505513849E-15 5.6621374255883E-15 7.21644966006352E-16"
+          rpy="0 0 0" />
+        <mass
+          value="0.530143760293278" />
+        <inertia
+          ixx="0.000785275444934419"
+          ixy="-2.45913425065777E-18"
+          ixz="7.77237811330421E-35"
+          iyy="0.00149102932582485"
+          iyz="2.53570236682917E-36"
+          izz="0.000785275444934419" />
+      </inertial>
+      <visual>
+        <origin
+          xyz="0 0 0"
+          rpy="0 0 0" />
+        <geometry>
+          <mesh
+            filename="package://tinker_description/meshes/wheel_rb_link.STL" />
+        </geometry>
+        <material
+          name="">
+          <color
+            rgba="1 1 1 1" />
+        </material>
+      </visual>
+      <collision>
+        <origin
+          xyz="0 0 0"
+          rpy="0 0 0" />
+        <geometry>
+          <mesh
+            filename="package://tinker_description/meshes/wheel_rb_link.STL" />
+        </geometry>
+      </collision>
+    </link>
+    <joint
+      name="${prefix}wheel_rb_joint"
+      type="continuous">
+      <origin
+        xyz="-0.217794117647063 -0.209999999999998 0.0749999999999995"
+        rpy="0 0 0" />
+      <parent
+        link="${prefix}base_link" />
+      <child
+        link="${prefix}wheel_rb_link" />
+      <axis
+        xyz="0 1 0" />
+    </joint>
+    
+    <!-- controller -->
+    <!--gazebo>
+      <plugin name="differential_drive_controller" 
+              filename="libgazebo_ros_diff_drive.so">
+        <rosDebugLevel>Info</rosDebugLevel>
+        <publishWheelTF>true</publishWheelTF>
+        <robotNamespace>/</robotNamespace>
+        <publishTf>1</publishTf>
+        <publishWheelJointState>true</publishWheelJointState>
+        <alwaysOn>true</alwaysOn>
+        <updateRate>100.0</updateRate>
+        <legacyMode>true</legacyMode>
+        <leftJoint>${prefix}wheel_lf_joint</leftJoint>
+        <rightJoint>${prefix}wheel_rf_joint</rightJoint>
+        <wheelSeparation>0.42</wheelSeparation>
+        <wheelDiameter>0.15</wheelDiameter>
+        <broadcastTF>1</broadcastTF>
+        <wheelTorque>100</wheelTorque>
+        <wheelAcceleration>1</wheelAcceleration>
+        <commandTopic>cmd_vel</commandTopic>
+        <odometryFrame>odom</odometryFrame> 
+        <odometryTopic>odom</odometryTopic> 
+        <robotBaseFrame>${prefix}base_link</robotBaseFrame>
+      </plugin>
+    </gazebo--> 
+    
+  </xacro:macro>  
+</robot>

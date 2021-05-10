@@ -1,0 +1,16 @@
+<?xml version="1.0" ?>
+
+<robot name="robotiq_140_gripper" xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <xacro:macro name="robotiq_140_gripper" params="prefix parent *origin">
+    <joint name="${prefix}robotiq_140_base_joint" type="fixed" >
+      <parent link="${parent}" />
+      <child link="${prefix}robotiq_arg2f_base_link" />
+      <xacro:insert_block name="origin" />
+    </joint>
+
+    <xacro:include filename="$(find robotiq_2f_140_gripper_visualization)/urdf/robotiq_arg2f_140_model_macro.xacro" />
+    <xacro:robotiq_arg2f_140 prefix=""/>
+  </xacro:macro>
+
+</robot>

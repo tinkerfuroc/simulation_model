@@ -1,0 +1,9 @@
+wheel_lf_controller:
+    type: velocity_controllers/JointVelocityController
+    joint: stl_wheel_lf_joint
+    pid: {p: 100.0, i: 0.01, d: 10.0}
+
+wheel_rf_controller:
+    type: velocity_controllers/JointVelocityController
+    joint: stl_wheel_rf_joint
+    pid: {p: 100.0, i: 0.01, d: 10.0}

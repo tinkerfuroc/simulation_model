@@ -1,0 +1,148 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="tinker">
+
+  <xacro:property name="stl_trans_xyz" value="0.027 -0.002 0.002" />
+  <xacro:property name="stl_rotate_rpy" value="0. 0. 0" />
+  <xacro:property name="stl_viz_scale" value="1 1 1" />
+  
+  <link name="base_link"/>
+  
+  <!-- gazebo ros control -->
+  <gazebo>
+    <plugin name="ros_control" filename="libgazebo_ros_control.so">
+      <!--robotNamespace>/</robotNamespace-->
+      <!--robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType-->
+    </plugin>
+  </gazebo>
+
+  <xacro:include filename="$(find simulation)/urdf/tinker_struct.urdf.xacro" />
+  <xacro:tinker_stl prefix="stl_" parent="base_link"> 
+    <origin xyz="${stl_trans_xyz}" rpy="${stl_rotate_rpy}"/>
+  </xacro:tinker_stl> 
+
+  <!--
+  <link name="urg_laser_left" />
+  <link name="urg_laser_right" />
+  <link name="urg_laser_bottom" />
+
+  <xacro:property name="urg_left_trans_xyz" value="0.25 0.19 0.25" />
+  <joint name="base_to_urg_left" type="fixed">
+    <parent link="base_link" />
+    <child link="urg_laser_left" />
+    <origin xyz="${urg_left_trans_xyz}"/>
+  </joint>
+
+  <xacro:property name="urg_right_trans_xyz" value="0.25 -0.19 0.25" />
+  <joint name="base_to_urg_right" type="fixed">
+    <parent link="base_link" />
+    <child link="urg_laser_right" />
+    <origin xyz="${urg_right_trans_xyz}" />
+  </joint>
+
+  <xacro:property name="urg_bottom_trans_xyz" value="-0.25 0.0 0.12" />
+  <xacro:property name="urg_bottom_rotate" value="0.0 0.0 3.142" />
+  <joint name="base_to_urg_bottom" type="fixed" >
+    <parent link="base_link" />
+    <child link="urg_laser_bottom" />
+    <origin xyz="${urg_bottom_trans_xyz}" rpy="${urg_bottom_rotate}" />
+  </joint>
+  -->
+  
+  <link name="urg_laser_front" />
+  <xacro:property name="urg_front_trans_xyz" value="0.25 0. 0.25" />
+  <joint name="base_to_urg_front" type="fixed">
+    <parent link="base_link" />
+    <child link="urg_laser_front" />
+    <origin xyz="${urg_front_trans_xyz}"/>
+  </joint>
+  <gazebo reference="urg_laser_front">
+    <sensor type="gpu_ray" name="head_hokuyo_sensor">
+      <pose>0 0 0 0 0 0</pose>
+      <visualize>true</visualize>
+      <update_rate>40</update_rate>
+      <ray>
+        <scan>
+          <horizontal>
+            <samples>720</samples>
+            <resolution>1</resolution>
+            <min_angle>-1.570796</min_angle>
+            <max_angle>1.570796</max_angle>
+          </horizontal>
+        </scan>
+        <range>
+          <min>0.10</min>
+          <max>30.0</max>
+          <resolution>0.01</resolution>
+        </range>
+        <noise>
+          <type>gaussian</type>
+          <!-- Noise parameters based on published spec for Hokuyo laser
+               achieving "+-30mm" accuracy at range < 10m.  A mean of 0.0m and
+               stddev of 0.01m will put 99.7% of samples within 0.03m of the true
+               reading. -->
+          <mean>0.0</mean>
+          <stddev>0.01</stddev>
+        </noise>
+      </ray>
+      <plugin name="gazebo_ros_head_hokuyo_controller" filename="libgazebo_ros_gpu_laser.so">
+        <topicName>/urg_scan_front</topicName>
+        <frameName>urg_laser_front</frameName>
+      </plugin>
+    </sensor>
+  </gazebo>
+
+  <!-- ur5 -->
+  <xacro:arg name="kinematics_config" default="$(find ur_description)/config/ur5_default.yaml"/>
+  <xacro:include filename="$(find ur_description)/urdf/ur5.urdf.xacro" />
+  <xacro:ur5_robot prefix="ur_" joint_limited="true"
+    shoulder_pan_lower_limit="${-pi}" shoulder_pan_upper_limit="${pi}"
+    shoulder_lift_lower_limit="${-pi}" shoulder_lift_upper_limit="${pi}"
+    elbow_joint_lower_limit="${-pi}" elbow_joint_upper_limit="${pi}"
+    wrist_1_lower_limit="${-pi}" wrist_1_upper_limit="${pi}"
+    wrist_2_lower_limit="${-pi}" wrist_2_upper_limit="${pi}"
+    wrist_3_lower_limit="${-pi}" wrist_3_upper_limit="${pi}"
+    kinematics_file="${load_yaml('$(arg kinematics_config)')}"
+  />
+
+  <xacro:property name="ur5_trans_xyz" value="0.105 -0.002 0.63" />
+  <joint name="arm_joint" type="fixed">
+    <parent link="base_link" />
+    <child link = "ur_base_link" />
+    <origin xyz="${ur5_trans_xyz}" rpy="0.0 0.0 -0.78539815" />
+  </joint>
+
+  <link name="ur_gripper"/>
+  <joint name="ur_final_gripper_joint" type="fixed">
+    <parent link="ur_ee_link" />
+    <child link="ur_gripper" />
+    <origin xyz="0.19 0. 0." rpy="${pi/2} 0. 0." />
+  </joint>
+
+  <!-- robotiq gripper -->
+  <xacro:include filename="$(find simulation)/urdf/robotiq_140.urdf.xacro" />
+  <xacro:robotiq_140_gripper prefix="" parent="ur_ee_link">
+    <origin xyz="0.01 0. 0." rpy="${pi/2} 0 ${pi/2}"/>
+  </xacro:robotiq_140_gripper>
+
+  <!--force torque sensor-->
+  <!--<xacro:include filename="$(find robotiq_ft_sensor)/urdf/robotiq_fts150.urdf.xacro" />
+  <xacro:robotiq_fts150 prefix="" parent="ur_ee_link" >
+    <origin xyz="0.009 0 0 " rpy="-${pi/2} 0 -${pi/2}"/>
+  </xacro:robotiq_fts150>-->
+
+  <!-- iQR pan -->
+  <xacro:include filename="$(find simulation)/urdf/pan_tilt.urdf.xacro" />
+  <xacro:pan_tilt parent="base_link" >
+    <origin xyz="-0.1756 0 1.273" rpy="0 0 0" />
+  </xacro:pan_tilt>
+  
+  <!-- kineck dk -->
+  <xacro:arg name="tf_prefix" default="kinect_" />
+  <xacro:include filename="$(find simulation)/urdf/azure_kinect.urdf.xacro" />
+  <joint name="fix_kinect" type="fixed">
+    <parent link="pan_tilt_kinect_surface" />
+    <child link="kinect_camera_base" />
+    <origin xyz="0.071 0 0.004" rpy="0 0 0" />
+  </joint>
+
+</robot>

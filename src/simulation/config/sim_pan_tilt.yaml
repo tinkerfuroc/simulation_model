@@ -1,0 +1,10 @@
+pan_tilt_yaw:
+    type: effort_controllers/JointPositionController
+    joint: pan_tilt_yaw_joint
+    pid: {p: 100.0, i: 0.01, d: 10.0}
+
+pan_tilt_pitch:
+    type: effort_controllers/JointPositionController
+    joint: pan_tilt_pitch_joint
+    pid: {p: 100.0, i: 0.01, d: 10.0}
+
